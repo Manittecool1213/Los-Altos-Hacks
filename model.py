@@ -3,14 +3,12 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import numpy as np
 import pandas as pd
+import sklearn
 from sklearn.model_selection import train_test_split
 
 
 # Exploring Data
 english_dataset = np.array(pd.read_csv('C:/Users/tanwa/Downloads/A_Z Handwritten Data/A_Z Handwritten Data.csv')) # The path can be replaced with the local path containing the data file.
-english_alphabet = pd.DataFrame(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
-                                 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
-                                'u', 'v', 'w', 'x', 'y', 'z'], [i for i in range(1, 27)])
 
 X, y = english_dataset[:, 1:], english_dataset[:, 0] # Dividing the data into dependant and independant variables.
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2) # Dividing the data into training and testing data.
@@ -59,4 +57,10 @@ X_test = preprocessing_pipeline.transform(X_test)
 
 
 # Implementing Random Forest
+from sklearn.ensemble import RandomForestClassifier
+forest_clf = RandomForestClassifier(max_depth=10)
+forest_clf.fit(X_train_proc[:25000], y_train[:25000])
 
+from sklearn.metrics import accuracy_score
+y_pred_forest = forest_clf.predict(X_test)
+print(accuracy_score(y_pred_forest, y_test))
