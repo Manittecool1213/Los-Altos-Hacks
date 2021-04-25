@@ -1,4 +1,10 @@
-# Import Dependencies
+"""
+Import Dependencies:
+1. Matplotlib
+2. Numpy 
+3. Pandas
+4. Sklearn 
+"""
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import numpy as np
@@ -6,7 +12,19 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 
 
-# Exploring Data
+"""
+Exploring Data
+1. Opening the data as a panda data frame, then converting to a numpy array 
+2. Dividing the data into dependant and independant variables 
+3. Dividing the data into training and testing data 
+
+english_dataset
+Type: numpy array 
+Description: stores over 37,000 data elements of writing examples along with their true values
+
+
+
+"""
 english_dataset = np.array(pd.read_csv('C:/Users/tanwa/Downloads/A_Z Handwritten Data/A_Z Handwritten Data.csv')) # The path can be replaced with the local path containing the data file.
 english_alphabet = pd.DataFrame(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
                                  'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
