@@ -23,15 +23,36 @@ english_dataset
 Type: numpy array 
 Description: stores over 37,000 data elements of writing examples along with their true values
 
+X
+Type: numpy nd-array 
+Description: dependant variables, used to determine target values (y)
 
+y
+Type: numpy nd-array 
+Description: target values
 
+X_train, y_train
+Type: numpy nd-arrays 
+Description: trainging values 
+
+X_test, y_test
+Type: numpy nd-arrays 
+Description: testing values
 """
 english_dataset = np.array(pd.read_csv('C:/Users/tanwa/Downloads/A_Z Handwritten Data/A_Z Handwritten Data.csv')) # The path can be replaced with the local path containing the data file.
 
 X, y = english_dataset[:, 1:], english_dataset[:, 0] # Dividing the data into dependant and independant variables.
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2) # Dividing the data into training and testing data.
 
-# Preparing Data
+"""
+Preparing data:
+1. Image transformer:
+    a) Resizes the image to width(int) and height(int)
+    b) Enhances contrast in the image(converts to greyscale)
+2. Preprocessing pipeline:
+    Recieves instance of ImageTransformer and StandardScaler(builtin sklearn class) and applies both to x_train to form
+    x_train_proc which is the training data used for the model.
+"""
 from sklearn.base import BaseEstimator, TransformerMixin
 
 class ImageTransformer(BaseEstimator, TransformerMixin):
@@ -62,7 +83,6 @@ class ImageTransformer(BaseEstimator, TransformerMixin):
 from sklearn.pipeline import Pipeline, make_pipeline
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 
-
 preprocessing_pipeline = Pipeline([
     ('image_trf', ImageTransformer()),
     ('scaler', StandardScaler()),
@@ -74,7 +94,10 @@ X_train_proc = preprocessing_pipeline.fit_transform(X_train)
 X_test = preprocessing_pipeline.transform(X_test)
 
 
-# Implementing Random Forest
+"""
+Implementing random forestclassifier
+Accuracy ~ 90%
+"""
 from sklearn.ensemble import RandomForestClassifier
 forest_clf = RandomForestClassifier(max_depth=10)
 forest_clf.fit(X_train_proc[:25000], y_train[:25000])
