@@ -1,26 +1,26 @@
 """
 Import Dependencies:
 1. Matplotlib
-2. Numpy 
+2. Numpy
 3. Pandas
-4. Sklearn 
+4. Sklearn
 """
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import numpy as np
 import pandas as pd
-import sklearn
 from sklearn.model_selection import train_test_split
+import pickle
 
 
 """
 Exploring Data
-1. Opening the data as a panda data frame, then converting to a numpy array 
-2. Dividing the data into dependant and independant variables 
-3. Dividing the data into training and testing data 
+1. Opening the data as a panda data frame, then converting to a numpy array
+2. Dividing the data into dependant and independant variables
+3. Dividing the data into training and testing data
 
 english_dataset
-Type: numpy array 
+Type: numpy array
 Description: stores over 37,000 data elements of writing examples along with their true values
 
 X
@@ -102,6 +102,10 @@ from sklearn.ensemble import RandomForestClassifier
 forest_clf = RandomForestClassifier(max_depth=10)
 forest_clf.fit(X_train_proc[:25000], y_train[:25000])
 
-from sklearn.metrics import accuracy_score
-y_pred_forest = forest_clf.predict(X_test)
-print(accuracy_score(y_pred_forest, y_test))
+# from sklearn.metrics import accuracy_score
+# y_pred_forest = forest_clf.predict(X_test)
+# print(accuracy_score(y_pred_forest, y_test))
+
+# Saving model using pickle
+filename = 'RandomForestModel.sav'
+pickle.dump(forest_clf, open(filename, 'wb'))
