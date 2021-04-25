@@ -5,13 +5,12 @@ Import Dependencies:
 3. Pandas
 4. Sklearn
 """
-import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
+
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 import pickle
-
+from PIL import ImageEnhance
 
 """
 Exploring Data
@@ -24,19 +23,19 @@ Type: numpy array
 Description: stores over 37,000 data elements of writing examples along with their true values
 
 X
-Type: numpy nd-array 
+Type: numpy nd-array
 Description: dependant variables, used to determine target values (y)
 
 y
-Type: numpy nd-array 
+Type: numpy nd-array
 Description: target values
 
 X_train, y_train
-Type: numpy nd-arrays 
-Description: trainging values 
+Type: numpy nd-arrays
+Description: trainging values
 
 X_test, y_test
-Type: numpy nd-arrays 
+Type: numpy nd-arrays
 Description: testing values
 """
 english_dataset = np.array(pd.read_csv('C:/Users/tanwa/Downloads/A_Z Handwritten Data/A_Z Handwritten Data.csv')) # The path can be replaced with the local path containing the data file.
@@ -93,7 +92,6 @@ preprocessing_pipeline.set_params(image_trf__width=width, image_trf__height=heig
 X_train_proc = preprocessing_pipeline.fit_transform(X_train)
 X_test = preprocessing_pipeline.transform(X_test)
 
-
 """
 Implementing random forestclassifier
 Accuracy ~ 90%
@@ -109,3 +107,5 @@ forest_clf.fit(X_train_proc[:25000], y_train[:25000])
 # Saving model using pickle
 filename = 'RandomForestModel.sav'
 pickle.dump(forest_clf, open(filename, 'wb'))
+
+
