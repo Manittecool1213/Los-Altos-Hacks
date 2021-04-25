@@ -1,0 +1,62 @@
+# Import Dependencies
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+
+
+# Exploring Data
+english_dataset = np.array(pd.read_csv('C:/Users/tanwa/Downloads/A_Z Handwritten Data/A_Z Handwritten Data.csv')) # The path can be replaced with the local path containing the data file.
+english_alphabet = pd.DataFrame(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+                                 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
+                                'u', 'v', 'w', 'x', 'y', 'z'], [i for i in range(1, 27)])
+
+X, y = english_dataset[:, 1:], english_dataset[:, 0] # Dividing the data into dependant and independant variables.
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2) # Dividing the data into training and testing data.
+
+# Preparing Data
+from sklearn.base import BaseEstimator, TransformerMixin
+
+class ImageTransformer(BaseEstimator, TransformerMixin):
+    def __init__(self, width=14, height=14,  is_img=False):
+        self.width = width
+        self.height = height
+        self.is_img = is_img
+
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        if self.is_img:
+            images = []
+            # load the image and convert to grayscale
+            for img in X:
+
+                image = img.convert('L').resize((self.width, self.height))
+
+                enhancer = ImageEnhance.Contrast(image)
+                image = enhancer.enhance(1.0)
+
+                images.append(np.asarray(image).reshape(-1))
+            return np.array(images)
+        else:
+            return X
+
+from sklearn.pipeline import Pipeline, make_pipeline
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
+
+
+preprocessing_pipeline = Pipeline([
+    ('image_trf', ImageTransformer()),
+    ('scaler', StandardScaler()),
+])
+
+width, height = 28, 28
+preprocessing_pipeline.set_params(image_trf__width=width, image_trf__height=height, image_trf__is_img=False)
+X_train_proc = preprocessing_pipeline.fit_transform(X_train)
+X_test = preprocessing_pipeline.transform(X_test)
+
+
+# Implementing Random Forest
+
