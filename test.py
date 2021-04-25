@@ -14,7 +14,6 @@ from PIL import ImageEnhance, Image
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
-ls = []
 
 """
 Exploring Data
@@ -45,45 +44,55 @@ Description: testing values
 english_dataset = np.array(pd.read_csv('C:/Users/tanwa/Downloads/A_Z Handwritten Data/A_Z Handwritten Data.csv')) # The path can be replaced with the local path containing the data file.
 
 X, y = english_dataset[:, 1:], english_dataset[:, 0] # Dividing the data into dependant and independant variables.
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2) # Dividing the data into training and testing data.
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state = 1) # Dividing the data into training and testing data.
 
 
+new_arr = X_test[0]
+new_arr.shape = (28, 28)
 
+imgplot = plt.imshow(new_arr)
+plt.show()
 
-# english_alphabet = pd.DataFrame(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
-#                                  'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
-#                                 'u', 'v', 'w', 'x', 'y', 'z'], [i for i in range(1, 27)])
+im = Image.fromarray(X_test[0])
+im.save('from-array-p.png')
 
-
-# def plot_letters(images, labels, width=14, height=14):
-#     rows, cols = 4, 6
-
-#     fig=plt.figure(figsize=(14, 14))
-#     sub_plot_i = 1
-
-#     for i in range(0, 20):
-#         fig.add_subplot(rows, cols, sub_plot_i)
-#         sub_plot_i += 1
-#         image = images[i].reshape(width, height)
-#         plt.imshow(image, cmap='gray')
-#         label = labels[i].astype(int) + 1
-#         plt.title(english_alphabet.loc[label][0])
-
-
-#     fig.tight_layout()
-#     plt.show()
-
-# plot_letters(X_train, y_train, 28, 28)
-
+print(y_test[0])
 
 """
-Preparing data:
-1. Image transformer:
-    a) Resizes the image to width(int) and height(int)
-    b) Enhances contrast in the image(converts to greyscale)
-2. Preprocessing pipeline:
-    Recieves instance of ImageTransformer and StandardScaler(builtin sklearn class) and applies both to x_train to form
-    x_train_proc which is the training data used for the model.
+english_alphabet = pd.DataFrame(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+                                 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
+                                'u', 'v', 'w', 'x', 'y', 'z'], [i for i in range(1, 27)])
+
+
+def plot_letters(images, labels, width=14, height=14):
+    rows, cols = 4, 6
+
+    fig=plt.figure(figsize=(14, 14))
+    sub_plot_i = 1
+
+    for i in range(0, 2):
+        fig.add_subplot(rows, cols, sub_plot_i)
+        sub_plot_i += 1
+        image = images[i].reshape(width, height)
+        plt.imshow(image, cmap='gray')
+        label = labels[i].astype(int) + 1
+        plt.title(english_alphabet.loc[label][0])
+
+
+    fig.tight_layout()
+    plt.show()
+
+plot_letters(X_train, y_train, 28, 28)
+"""
+
+
+# Preparing data:
+# 1. Image transformer:
+#     a) Resizes the image to width(int) and height(int)
+#     b) Enhances contrast in the image(converts to greyscale)
+# 2. Preprocessing pipeline:
+#     Recieves instance of ImageTransformer and StandardScaler(builtin sklearn class) and applies both to x_train to form
+#     x_train_proc which is the training data used for the model.
 """
 from sklearn.base import BaseEstimator, TransformerMixin
 
@@ -126,8 +135,8 @@ X_train_proc = preprocessing_pipeline.fit_transform(X_train)
 X_test = preprocessing_pipeline.transform(X_test)
 
 """
-Implementing random forestclassifier
-Accuracy ~ 90%
+# Implementing random forestclassifier
+# Accuracy ~ 90%
 """
 from sklearn.ensemble import RandomForestClassifier
 forest_clf = RandomForestClassifier(max_depth=10)
@@ -151,7 +160,7 @@ forest_clf.fit(X_train_proc[:25000], y_train[:25000])
 # print(type(im))
 
 #############################################################
-ls = [mpimg.imread('Screenshot (1024).png') for i in range(10)]
+# ls = [mpimg.imread('Screenshot (1024).png') for i in range(10)]
 
 
 # data = np.asarray(im).reshape(-1)
@@ -175,5 +184,5 @@ ls = [mpimg.imread('Screenshot (1024).png') for i in range(10)]
 # # print(english_alphabet.loc[result])
 # print(result)
 
-
+"""
 

@@ -1,20 +1,17 @@
-"""
-Import Dependencies:
-1. Matplotlib
-2. Numpy
-3. Pandas
-4. Sklearn
-"""
-
+# Importing Dependencies
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
-import pickle
+from sklearn.base import BaseEstimator, TransformerMixin
+from sklearn.pipeline import Pipeline, make_pipeline
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from PIL import ImageEnhance
+import pickle
+
 
 """
 Exploring Data
-1. Opening the data as a panda data frame, then converting to a numpy array
+1. Opening the data as a pandas data frame, then converting to a numpy array
 2. Dividing the data into dependant and independant variables
 3. Dividing the data into training and testing data
 
@@ -38,10 +35,11 @@ X_test, y_test
 Type: numpy nd-arrays
 Description: testing values
 """
-english_dataset = np.array(pd.read_csv('C:/Users/tanwa/Downloads/A_Z Handwritten Data/A_Z Handwritten Data.csv')) # The path can be replaced with the local path containing the data file.
 
-X, y = english_dataset[:, 1:], english_dataset[:, 0] # Dividing the data into dependant and independant variables.
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2) # Dividing the data into training and testing data.
+english_dataset = np.array(pd.read_csv('C:/Users/tanwa/Downloads/A_Z Handwritten Data/A_Z Handwritten Data.csv'))
+X, y = english_dataset[:, 1:], english_dataset[:, 0]
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
 
 """
 Preparing data:
@@ -52,7 +50,6 @@ Preparing data:
     Recieves instance of ImageTransformer and StandardScaler(builtin sklearn class) and applies both to x_train to form
     x_train_proc which is the training data used for the model.
 """
-from sklearn.base import BaseEstimator, TransformerMixin
 
 class ImageTransformer(BaseEstimator, TransformerMixin):
     def __init__(self, width=14, height=14,  is_img=False):
@@ -79,9 +76,6 @@ class ImageTransformer(BaseEstimator, TransformerMixin):
         else:
             return X
 
-from sklearn.pipeline import Pipeline, make_pipeline
-from sklearn.preprocessing import StandardScaler, MinMaxScaler
-
 preprocessing_pipeline = Pipeline([
     ('image_trf', ImageTransformer()),
     ('scaler', StandardScaler()),
@@ -92,10 +86,12 @@ preprocessing_pipeline.set_params(image_trf__width=width, image_trf__height=heig
 X_train_proc = preprocessing_pipeline.fit_transform(X_train)
 X_test = preprocessing_pipeline.transform(X_test)
 
+
 """
 Implementing random forestclassifier
 Accuracy ~ 90%
 """
+
 from sklearn.ensemble import RandomForestClassifier
 forest_clf = RandomForestClassifier(max_depth=10)
 forest_clf.fit(X_train_proc[:25000], y_train[:25000])
