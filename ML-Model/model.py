@@ -103,5 +103,3 @@ forest_clf.fit(X_train_proc[:25000], y_train[:25000])
 # Saving model using pickle
 filename = 'RandomForestModel.sav'
 pickle.dump(forest_clf, open(filename, 'wb'))
-
-
